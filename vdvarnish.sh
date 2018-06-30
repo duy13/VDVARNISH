@@ -171,20 +171,20 @@ if [ "$goc" != "$tai" ]; then
 	curl -L https://files.voduy.com/VDVARNISH/varnish.params.txt -o /etc/varnish/varnish.params
 fi
 
-
+if [ "$should_ask" = "y" ]; then 
 sed -i "s#82#$Varnish_Server_port#g" /etc/varnish/varnish.params
 sed -i "s#512#$Varnish_Server_sizecache#g" /etc/varnish/varnish.params
 
 sed -i "s#127.0.0.1#$Varnish_Backend_ip#g" /etc/varnish/default.vcl
 sed -i "s#8080#$Varnish_Backend_port#g" /etc/varnish/default.vcl
-
+fi
 
 
 chkconfig varnish on
-
+service varnish restart >/dev/null 2>&1 ; sleep 5; 
 
 varnishd -V
 echo '
 =====> Install and Config VDVARNISH Done! <====='
-service varnish restart >/dev/null 2>&1 ; sleep 5; netstat -lntup|grep varnishd
+netstat -lntup|grep varnishd
 
