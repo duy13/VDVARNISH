@@ -1,5 +1,5 @@
-775e614e205359ff5f789cc18e821e2e  default.vcl.txt
-96bb9608d99dca2cb7df0ce80da232f3  md5sum.txt
+9636afaf312800e7432c7b126c26d5d2  default.vcl.txt
+b1480f69ac9c8bec80293ef557a8a411  md5sum.txt
 301b79480f491befb0f387d9a60ad639  README.md
 9629ae20bf7e7348cd725adf10ba20af  varnish.params.txt
 afb3a6f8c85d1c86350269920a9a30bb  vdvarnish.sh

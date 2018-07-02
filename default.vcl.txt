@@ -207,7 +207,7 @@ sub vcl_backend_response {
     set beresp.grace = 6h;
 
     # This is how long Varnish will keep cached content
-    set beresp.ttl = 2m;
+    set beresp.ttl = 10h;
 
     # Modify "expires" header - https://www.varnish-cache.org/trac/wiki/VCLExampleSetExpires
     #set beresp.http.Expires = "" + (now + beresp.ttl);
