@@ -38,7 +38,7 @@ sub vcl_recv {
     unset req.http.proxy;
 
     # Normalize the query arguments
-    set req.url = std.querysort(req.url);
+    # set req.url = std.querysort(req.url);
 
 
     # Don't cache HTTP authorization/authentication pages and pages with certain headers or cookies
