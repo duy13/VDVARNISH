@@ -55,7 +55,10 @@ echo 'Varnish Server version => '$Varnish_Server_version''
 
 echo -n 'Which VARNISH Cache Server Port you want to listen [82]: '
 read Varnish_Server_port
-if [ "$Varnish_Server_port" -le "65535" ] 2>/dev/null
+if [ "$Varnish_Server_port" = "" ]; then
+Varnish_Server_port=82
+fi
+if [ "$Varnish_Server_port" -le "65535" ];
 then
 echo 'Varnish Port Listen => '$Varnish_Server_port''
 else
@@ -118,29 +121,31 @@ fi
 
 
 if [ "$Varnish_Server_version" = "6" ]; then
-echo '[varnishcache_varnish60]
-name=varnishcache_varnish60
-baseurl=https://packagecloud.io/varnishcache/varnish60/el/'$release'/$basearch
+echo '[varnishcache_varnish60lts]
+name=varnishcache_varnish60lts
+baseurl=https://packagecloud.io/varnishcache/varnish60lts/el/'$release'/$basearch
 repo_gpgcheck=1
 gpgcheck=0
 enabled=1
-gpgkey=https://packagecloud.io/varnishcache/varnish60/gpgkey
+gpgkey=https://packagecloud.io/varnishcache/varnish60lts/gpgkey
 sslverify=1
 sslcacert=/etc/pki/tls/certs/ca-bundle.crt
 metadata_expire=300
 
-[varnishcache_varnish60-source]
-name=varnishcache_varnish60-source
-baseurl=https://packagecloud.io/varnishcache/varnish60/el/'$release'/SRPMS
+[varnishcache_varnish60lts-source]
+name=varnishcache_varnish60lts-source
+baseurl=https://packagecloud.io/varnishcache/varnish60lts/el/'$release'/SRPMS
 repo_gpgcheck=1
 gpgcheck=0
 enabled=1
-gpgkey=https://packagecloud.io/varnishcache/varnish60/gpgkey
+gpgkey=https://packagecloud.io/varnishcache/varnish60lts/gpgkey
 sslverify=1
 sslcacert=/etc/pki/tls/certs/ca-bundle.crt
-metadata_expire=300' > /etc/yum.repos.d/varnishcache_varnish60.repo
+metadata_expire=300' > /etc/yum.repos.d/varnishcache_varnish60lts.repo
 
-yum -q makecache -y --disablerepo='*' --enablerepo='varnishcache_varnish60'
+yum -q makecache -y --disablerepo='*' --enablerepo='varnishcache_varnish60lts'
+
+
 fi
 
 yum -y install varnish
@@ -179,6 +184,10 @@ sed -i "s#127.0.0.1#$Varnish_Backend_ip#g" /etc/varnish/default.vcl
 sed -i "s#8080#$Varnish_Backend_port#g" /etc/varnish/default.vcl
 fi
 
+if [ "$Varnish_Server_version" = "6" ]; then
+sed -i "s#6081#$Varnish_Server_port#g" /usr/lib/systemd/system/varnish.service
+sed -i "s#256#$Varnish_Server_sizecache#g" /usr/lib/systemd/system/varnish.service
+fi
 
 chkconfig varnish on
 service varnish restart >/dev/null 2>&1 ; sleep 5; 
